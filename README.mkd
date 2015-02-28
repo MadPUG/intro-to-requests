@@ -1,0 +1,24 @@
+# Introduction to Requests
+
+This introduction to requests presentation was written for MadPUG (the Madison 
+Python Users Group) to be presented on 12 March 2015. As the presentation 
+ages, so may its accuracy.
+
+## License
+
+This presentation is copyrighted by Ian Cordasco. Permission to present this 
+presentation to other people is not permitted. Any code contained in this 
+presentation is licensed under the MIT license. See the `LICENSE` file for the 
+details of the MIT license.
+
+## Building the presentation
+
+- Install heiroglyph and its dependencies from requirements.txt
+
+```
+pip install -r requirements.txt
+```
+
+- Run `make slides`
+
+- Run `./scripts/serve.sh` (you may need to modify this to run on python2.x)
