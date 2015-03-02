@@ -9,9 +9,15 @@ Introduction to Requests
 
 A short presentation about HTTP for humans by Ian Cordasco
 
+.. nextslide::
+
+Well, actually, just HTTP/1.* for Humans.
+
+We don't yet support HTTP/2
+
 .. slide:: What is requests?
 
-        HTTP for Humans
+    HTTP for Humans
 
 .. slide:: What is requests?
 
@@ -106,7 +112,7 @@ A short presentation about HTTP for humans by Ian Cordasco
 
     - 2xx: Success
 
-    - 3xx: Your content is elsewhere
+    - 3xx: This is not the URL you're looking for
 
     - 4xx: You messed up
 
@@ -202,3 +208,142 @@ A short presentation about HTTP for humans by Ian Cordasco
          'headers': {'Content-Length': '20',
                      'Content-Type': 'application/x-www-form-urlencoded'},
          'json': None}
+
+    .. note::
+
+        You'll notice that this as parsed as form data but what did we
+        actually send?
+
+.. slide:: Inspecting the Request
+
+    .. code-block:: pycon
+
+        >>> response.request
+        <PreparedRequest [POST]>
+        >>> response.request.body
+        'some=data&other=data'
+        >>> response.request.headers['Content-Type']
+        'application/x-www-form-urlencoded'
+
+    .. note::
+
+        Here, we're sending urlencoded form data. It's one of the most common
+        ways of browsers submitting forms to a server. (Actually it's almost
+        always the way that browsers submit simple form responses to a
+        server.)
+
+.. slide:: HTTPS and Security
+
+    requests verifies the certificate presented for a website is valid
+
+    - Hostname matches the hostnames the certificate is valid for
+
+    - The issuer chain is valid
+
+    .. note::
+
+        I mentioned this earlier. And you may have noticed at this point that
+        we keep talking to HTTPbin over HTTPS, what happens if we talk to a
+        service that doesn't support HTTPS over HTTPS?
+
+.. slide:: HTTPS and Security
+
+    .. code-block:: pycon
+
+        >>> requests.get('https://wondermark.com/1k62/')
+        # <snip>
+        requests.exceptions.SSLError: hostname 'wondermark.com' doesn't match
+        either of '*.gridserver.com', 'gridserver.com'
+
+    requests prevents* us from completing the request
+
+    .. note::
+
+        This only prevents us by raising an exception. We can tell requests to
+        ignore the problem but unless we are certain we're visiting a
+        trustworthy site (or one that has a self-signed certificate).
+
+.. slide:: Speed and connection reuse
+
+    If we just always used the ``requests.*`` API, our code will be elegant,
+    but not nearly as fast as it could be.
+
+    .. note::
+
+        Like browsers, requests allows a user to create a Session and reuse
+        connections to an existing server. This only happens when using a
+        Session though. By reusing connections, we're skipping the most
+        expensive part of talking to a server: creating a socket.
+
+.. slide:: Sessions
+
+    .. code-block:: pycon
+
+        >>> session = requests.Session()
+        >>> response = session.get('https://httpbin.org/get')
+
+.. slide:: Cookies
+
+    .. code-block:: pycon
+
+        >>> response = session.get('https://httpbin.org/cookies/set',
+        ... params={'a-cookie': 'a-cookie-value',
+        ... 'b-cookie': 'b-cookie-value'})
+        >>> response.cookies
+        <RequestsCookieJar[]>
+        >>> session.cookies
+        <RequestsCookieJar[Cookie(name='a-cookie', value='a-cookie-value'),
+        Cookie(name='b-cookie', value='b-cookie-value')]>
+
+    .. note::
+
+        Isn't that interesting. The response we have doesn't have cookies on
+        it but the session does store the cookies. The reason is that the
+        cookies are set while performing a redirect. So let's look at the
+        history of that response.
+
+        params here will construct a query string for your URL, so we don't
+        have to hand write it or escape the characters that are reserved in a
+        URL
+
+.. slide:: History
+
+    .. code-block:: pycon
+
+        >>> response.history
+        [<Response [302]>]
+        >>> response.history[0].cookies
+        <RequestsCookieJar[Cookie(name='a-cookie', value='a-cookie-value'),
+        Cookie(name='b-cookie', value='b-cookie-value')]>
+        >>> response.json()['cookies']
+        {'b-cookie': 'b-cookie-value', 'a-cookie': 'a-cookie-value'}
+
+    .. note::
+
+        Yep, the cookies are present on the original response because that's
+        the response where the server actually set them. Further, requests
+        knows to send those cookies to httpbin on our behalf. The URL we're
+        redirected to returns the cookies we send back to the server in the
+        JSON body.
+
+.. slide:: Authentication
+
+    .. code-block:: pycon
+
+        >>> url = 'https://httpbin.org/basic-auth/MadPUG/password'
+        >>> response = session.get(url, auth=('MadPUG', 'password'))
+        >>> resopnse.status_code, response.reason
+        (200, 'OK')
+        >>> response.json()
+        {'authenticated': True, 'user': 'MadPUG'}
+        >>> response.request.headers['Authorization']
+        'Basic TWFkUFVHOnBhc3N3b3Jk'
+
+    .. note::
+
+        As you can guess from the URL and the header sent, we're using basic
+        authentication. requests also supports Digest Authentication and there
+        are other libraries that provide different authentication mechanisms
+        like ntlm, kerberos, and oauth.
+
+.. slide:: Questions?
