@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Requests &mdash; Introduction to Requests 2015.02.28 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="_static/slides.css" type="text/css" />
+    
+
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2015.02.28',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/common.js"></script>
+    <script type="text/javascript" src="_static/slides.js"></script>
+    <script type="text/javascript" src="_static/sync.js"></script>
+    <script type="text/javascript" src="_static/controller.js"></script>
+    <script type="text/javascript" src="_static/init.js"></script>
+    
+    <link rel="top" title="Introduction to Requests 2015.02.28 documentation" href="#" /> 
+  </head>
+  <body>
+
+<section
+   id="slide_container"
+   class='slides layout-regular'>
+
+
+  <article class="slide level-1" id="introduction-to-requests">
+<h1>Introduction to Requests</h1>
+<p>A short presentation about HTTP for humans by Ian Cordasco</p>
+
+</article>
+<article class="slide level-1" id="id1">
+<h1>Introduction to Requests</h1>
+<p>Well, actually, just HTTP/1.* for Humans.</p>
+<p>We don't yet support HTTP/2</p>
+
+</article>
+<article class="admonition-what-is-requests slide level-1">
+<h1>What is requests?</h1>
+<p>HTTP for Humans</p>
+
+</article>
+<article class="admonition-what-is-requests slide level-1">
+<h1>What is requests?</h1>
+<p>Simple API for making HTTP requests</p>
+
+</article>
+<article class="admonition-what-is-requests slide level-1">
+<h1>What is requests?</h1>
+<ul class="simple">
+<li>Provides security by default<ul>
+<li>HTTPS hostname verification</li>
+<li>SNI available as an extra if your python does not support it natively</li>
+<li>Handles redirects securely</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<article class="admonition-installing-requests slide level-1">
+<h1>Installing Requests</h1>
+<div class="highlight-shell-session"><div class="highlight"><pre><span class="go">$ pip install requests</span>
+</pre></div>
+</div>
+<p>Yes, it is that easy. If you don't have pip installed though, see me
+afterwards for help.</p>
+
+</article>
+<article class="admonition-a-simple-game-of-fetch slide level-1">
+<h1>A simple game of fetch</h1>
+<p>Now that we have requests installed, let's do something with it.</p>
+
+</article>
+<article class="admonition-geting-some-data slide level-1">
+<h1>GETing some data</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;https://httpbin.org/get&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+
+</article>
+<article class="admonition-geting-some-data slide level-1">
+<h1>GETing some data</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+<span class="go">200</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">&#39;OK&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">headers</span>
+<span class="go">{&#39;access-control-allow-credentials&#39;: &#39;true&#39;,</span>
+<span class="go"> &#39;access-control-allow-origin&#39;: &#39;*&#39;,</span>
+<span class="go"> &#39;connection&#39;: &#39;keep-alive&#39;,</span>
+<span class="go"> &#39;content-length&#39;: &#39;266&#39;,</span>
+<span class="go"> &#39;content-type&#39;: &#39;application/json&#39;,</span>
+<span class="go"> &#39;date&#39;: &#39;Sat, 28 Feb 2015 21:03:45 GMT&#39;,</span>
+<span class="go"> &#39;server&#39;: &#39;nginx&#39;}</span>
+</pre></div>
+</div>
+
+</article>
+<article class="admonition-geting-some-data slide level-1">
+<h1>GETing some data</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">content</span>
+<span class="go">b&#39;{\n  &quot;args&quot;: {}, \n  &quot;headers&quot;: {\n    &quot;Accept&quot;: &quot;*/*&quot;, \n</span>
+<span class="go">&quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;, \n    &quot;Host&quot;: &quot;httpbin.org&quot;, \n</span>
+<span class="go">&quot;User-Agent&quot;: &quot;python-requests/2.5.3 CPython/3.4.2 Darwin/14.0.0&quot;\n</span>
+<span class="go">}, \n  &quot;url&quot;: &quot;https://httpbin.org/get&quot;\n}\n&#39;</span>
+</pre></div>
+</div>
+<p>The content of the response is a bytearray</p>
+
+</article>
+<article class="admonition-so-what-does-all-this-mean slide level-1">
+<h1>So what does all this mean?</h1>
+<p>We used the HTTP verb <tt class="docutils literal"><span class="pre">GET</span></tt> defined in <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7230.html"><strong>RFC 7230</strong></a> to request data from
+<tt class="docutils literal"><span class="pre">https://httpbin.org/get</span></tt>. We received a <tt class="docutils literal"><span class="pre">200</span> <span class="pre">OK</span></tt> response that had a
+content with <tt class="docutils literal"><span class="pre">JSON</span></tt> serialized data in it.</p>
+
+</article>
+<article class="admonition-woah-woah-slow-down slide level-1">
+<h1>Woah woah slow down</h1>
+<p>Everything our browsers (and requests) does on the internet is
+standardized by a group of people who associate with the Internet
+Engineering Task Force (IETF). They write Requests for Comments (RFCs) to
+codify the standards.</p>
+
+</article>
+<article class="admonition-http-rfcs slide level-1">
+<h1>HTTP &amp; RFCs</h1>
+<p>HTTP is defined by a set of RFCs that define verbs that mimic actions.</p>
+
+</article>
+<article class="admonition-http-verbs slide level-1">
+<h1>HTTP Verbs</h1>
+<p><tt class="docutils literal"><span class="pre">GET</span></tt>, <tt class="docutils literal"><span class="pre">POST</span></tt>, <tt class="docutils literal"><span class="pre">PUT</span></tt>, <tt class="docutils literal"><span class="pre">HEAD</span></tt>, <tt class="docutils literal"><span class="pre">OPTIONS</span></tt>, <tt class="docutils literal"><span class="pre">DELETE</span></tt>, <tt class="docutils literal"><span class="pre">PATCH</span></tt></p>
+
+</article>
+<article class="admonition-response-types slide level-1">
+<h1>Response Types</h1>
+<p>There are a bunch. The most common is <tt class="docutils literal"><span class="pre">200</span> <span class="pre">OK</span></tt> and they are generally
+classified by the first number.</p>
+
+</article>
+<article class="admonition-response-classes slide level-1">
+<h1>Response Classes</h1>
+<ul class="simple">
+<li>2xx: Success</li>
+<li>3xx: This is not the URL you're looking for</li>
+<li>4xx: You messed up</li>
+<li>5xx: We messed up</li>
+</ul>
+
+</article>
+<article class="admonition-response-headers slide level-1">
+<h1>Response Headers</h1>
+<p>These precede the actual body (content) of the response.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The include information about the length of the content, what type of
+content is in the response, and other critical information.</p>
+</div>
+
+</article>
+<article class="admonition-javascript-object-notation slide level-1">
+<h1>JavaScript Object Notation</h1>
+<p>a.k.a, JSON, <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7159.html"><strong>RFC 7159</strong></a>, ... Wait I thought we were talking about Python.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">So JSON is another standard that arose from needing to send data from
+the server to the browser in a stateful way while performing real-time
+communication. It's the JavaScript Object Notation but it is usable by
+pretty much any programming language, including Python.</p>
+</div>
+
+</article>
+<article class="admonition-so-what-does-all-this-mean slide level-1">
+<h1>So what does all this mean?</h1>
+<p>We used the HTTP verb <tt class="docutils literal"><span class="pre">GET</span></tt> defined in <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7230.html"><strong>RFC 7230</strong></a> to request data from
+<tt class="docutils literal"><span class="pre">https://httpbin.org/get</span></tt>. We received a <tt class="docutils literal"><span class="pre">200</span> <span class="pre">OK</span></tt> response that had a
+content with <tt class="docutils literal"><span class="pre">JSON</span></tt> serialized data in it.</p>
+
+</article>
+<article class="admonition-this-is-json slide level-1">
+<h1>This is JSON</h1>
+<div class="highlight-json"><div class="highlight"><pre>{&quot;args&quot;: {}, &quot;headers: {&quot;Accept&quot;: &quot;*/*&quot;, &quot;Accept-Encoding&quot;: &quot;gzip,
+deflate&quot;, &quot;Host&quot;: &quot;httpbin.org&quot;}, &quot;url&quot;: &quot;https://httpbin.org/get&quot;}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Looks a lot like python, doesn't it?</p>
+</div>
+
+</article>
+<article class="admonition-access-a-response-s-json slide level-1">
+<h1>Access a response's JSON</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="go">{&quot;args&quot;: {},</span>
+<span class="go"> &quot;headers: {&quot;Accept&quot;: &quot;*/*&quot;,</span>
+<span class="go">            &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span>
+<span class="go">            &quot;Host&quot;: &quot;httpbin.org&quot;},</span>
+<span class="go"> &quot;url&quot;: &quot;https://httpbin.org/get&quot;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">&quot;headers&quot;</span><span class="p">]</span>
+<span class="go">{&quot;Accept&quot;: &quot;*/*&quot;,</span>
+<span class="go"> &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span>
+<span class="go"> &quot;Host&quot;: &quot;httpbin.org&quot;},</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These headers are not the ones we get, but the ones that requests
+sends. HTTPBin will just return to you the data from your request in
+JSON.</p>
+</div>
+
+</article>
+<article class="admonition-how-to-send-json slide level-1">
+<h1>How to send JSON?</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;https://httpbin.org/post&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;foo&#39;</span><span class="p">:</span> <span class="s">&#39;bar&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="go">{&#39;data&#39;: &#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;,</span>
+<span class="go"> &#39;headers&#39;: {&#39;Content-Length&#39;: &#39;14&#39;,</span>
+<span class="go">             &#39;Content-Type&#39;: &#39;application/json&#39;},</span>
+<span class="go"> &#39;json&#39;: {&#39;foo&#39;: &#39;bar&#39;},</span>
+<span class="go"> &#39;url&#39;: &#39;https://httpbin.org/post&#39;}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We see here that HTTPbin returns the data we sent as both a string and
+interpreted as JSON, as we expect it. Also, the json parameter was
+only recently added to requests. requests takes responsibility for
+calculating the length of the data your sending to the server and puts
+it in the <tt class="docutils literal"><span class="pre">Content-Length</span></tt> header as well as sets the right
+<tt class="docutils literal"><span class="pre">Content-Type</span></tt> header.</p>
+</div>
+
+</article>
+<article class="admonition-what-about-other-data slide level-1">
+<h1>What about other data?</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;https://httpbin.org/post&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;some&#39;</span><span class="p">:</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;other&#39;</span><span class="p">:</span> <span class="s">&#39;data&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="go">{&#39;data&#39;: &#39;&#39;,</span>
+<span class="go"> &#39;form&#39;: {&#39;other&#39;: &#39;data&#39;, &#39;some&#39;: &#39;data&#39;},</span>
+<span class="go"> &#39;headers&#39;: {&#39;Content-Length&#39;: &#39;20&#39;,</span>
+<span class="go">             &#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;},</span>
+<span class="go"> &#39;json&#39;: None}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You'll notice that this as parsed as form data but what did we
+actually send?</p>
+</div>
+
+</article>
+<article class="admonition-inspecting-the-request slide level-1">
+<h1>Inspecting the Request</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">request</span>
+<span class="go">&lt;PreparedRequest [POST]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span>
+<span class="go">&#39;some=data&amp;other=data&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Content-Type&#39;</span><span class="p">]</span>
+<span class="go">&#39;application/x-www-form-urlencoded&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here, we're sending urlencoded form data. It's one of the most common
+ways of browsers submitting forms to a server. (Actually it's almost
+always the way that browsers submit simple form responses to a
+server.)</p>
+</div>
+
+</article>
+<article class="admonition-https-and-security slide level-1">
+<h1>HTTPS and Security</h1>
+<p>requests verifies the certificate presented for a website is valid</p>
+<ul class="simple">
+<li>Hostname matches the hostnames the certificate is valid for</li>
+<li>The issuer chain is valid</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I mentioned this earlier. And you may have noticed at this point that
+we keep talking to HTTPbin over HTTPS, what happens if we talk to a
+service that doesn't support HTTPS over HTTPS?</p>
+</div>
+
+</article>
+<article class="admonition-https-and-security slide level-1">
+<h1>HTTPS and Security</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;https://wondermark.com/1k62/&#39;</span><span class="p">)</span>
+<span class="go"># &lt;snip&gt;</span>
+<span class="go">requests.exceptions.SSLError: hostname &#39;wondermark.com&#39; doesn&#39;t match</span>
+<span class="go">either of &#39;*.gridserver.com&#39;, &#39;gridserver.com&#39;</span>
+</pre></div>
+</div>
+<p>requests prevents* us from completing the request</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This only prevents us by raising an exception. We can tell requests to
+ignore the problem but unless we are certain we're visiting a
+trustworthy site (or one that has a self-signed certificate).</p>
+</div>
+
+</article>
+<article class="admonition-speed-and-connection-reuse slide level-1">
+<h1>Speed and connection reuse</h1>
+<p>If we just always used the <tt class="docutils literal"><span class="pre">requests.*</span></tt> API, our code will be elegant,
+but not nearly as fast as it could be.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Like browsers, requests allows a user to create a Session and reuse
+connections to an existing server. This only happens when using a
+Session though. By reusing connections, we're skipping the most
+expensive part of talking to a server: creating a socket.</p>
+</div>
+
+</article>
+<article class="admonition-sessions slide level-1">
+<h1>Sessions</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;https://httpbin.org/get&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+
+</article>
+<article class="admonition-cookies slide level-1">
+<h1>Cookies</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;https://httpbin.org/cookies/set&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;a-cookie&#39;</span><span class="p">:</span> <span class="s">&#39;a-cookie-value&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="s">&#39;b-cookie&#39;</span><span class="p">:</span> <span class="s">&#39;b-cookie-value&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">cookies</span>
+<span class="go">&lt;RequestsCookieJar[]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">cookies</span>
+<span class="go">&lt;RequestsCookieJar[Cookie(name=&#39;a-cookie&#39;, value=&#39;a-cookie-value&#39;),</span>
+<span class="go">Cookie(name=&#39;b-cookie&#39;, value=&#39;b-cookie-value&#39;)]&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Isn't that interesting. The response we have doesn't have cookies on
+it but the session does store the cookies. The reason is that the
+cookies are set while performing a redirect. So let's look at the
+history of that response.</p>
+<p class="last">params here will construct a query string for your URL, so we don't
+have to hand write it or escape the characters that are reserved in a
+URL</p>
+</div>
+
+</article>
+<article class="admonition-history slide level-1">
+<h1>History</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">history</span>
+<span class="go">[&lt;Response [302]&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cookies</span>
+<span class="go">&lt;RequestsCookieJar[Cookie(name=&#39;a-cookie&#39;, value=&#39;a-cookie-value&#39;),</span>
+<span class="go">Cookie(name=&#39;b-cookie&#39;, value=&#39;b-cookie-value&#39;)]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">&#39;cookies&#39;</span><span class="p">]</span>
+<span class="go">{&#39;b-cookie&#39;: &#39;b-cookie-value&#39;, &#39;a-cookie&#39;: &#39;a-cookie-value&#39;}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Yep, the cookies are present on the original response because that's
+the response where the server actually set them. Further, requests
+knows to send those cookies to httpbin on our behalf. The URL we're
+redirected to returns the cookies we send back to the server in the
+JSON body.</p>
+</div>
+
+</article>
+<article class="admonition-authentication slide level-1">
+<h1>Authentication</h1>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s">&#39;https://httpbin.org/basic-auth/MadPUG/password&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;MadPUG&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resopnse</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">(200, &#39;OK&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="go">{&#39;authenticated&#39;: True, &#39;user&#39;: &#39;MadPUG&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span>
+<span class="go">&#39;Basic TWFkUFVHOnBhc3N3b3Jk&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As you can guess from the URL and the header sent, we're using basic
+authentication. requests also supports Digest Authentication and there
+are other libraries that provide different authentication mechanisms
+like ntlm, kerberos, and oauth.</p>
+</div>
+
+</article>
+<article class="admonition-questions slide level-1">
+<h1>Questions?</h1>
+
+</article>
+
+
+</section>
+
+<section id="slide_notes">
+
+</section>
+
+  </body>
+</html>
